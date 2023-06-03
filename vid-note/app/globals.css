@@ -44,4 +44,15 @@ body {
   }
 }
 
-body { overflow-x:hidden; }
+body {
+  overflow-x: hidden;
+}
+
+input ~ .dot {
+  background-color: #f43f5e;
+}
+
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #5855eb;
+}
