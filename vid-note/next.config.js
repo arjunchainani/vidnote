@@ -12,4 +12,8 @@ module.exports = {
       extend: {},
     },
     plugins: [],
+    images: {
+      domains: ['img.youtube.com'],
+    },
+
   }
