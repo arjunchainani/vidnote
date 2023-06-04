@@ -26,7 +26,7 @@
   "skip_bias_add_qkv": false,
   "slow_but_exact": false,
   "torch_dtype": "float32",
-  "transformers_version": "4.24.0",
+  "transformers_version": "4.29.2",
   "unk_token_id": 0,
   "use_cache": true,
   "vocab_size": 250880

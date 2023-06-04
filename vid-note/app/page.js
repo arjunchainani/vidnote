@@ -9,6 +9,7 @@ export default function Home() {
   const [url, setUrl] = useState("");
   const [showFrame, setShowFrame] = useState(false);
   const [toggle, setToggle] = useState("youtube");
+  const [text, setText] = useState();
   const opts = {
     height: "390",
     width: "640",
@@ -35,25 +36,25 @@ export default function Home() {
   async function handleYoutubeSubmit(e) {
     e.preventDefault();
     validateYoutubeFormWithJS();
-    // const response = await fetch("http://localhost:8000/convert", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     video_url: youtubeUrl,
-    //   }),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Accept': 'application/json'
-    //   }
-    // });
-    // const json_response = await response.json();
-    // console.log(json_response)
+    const response = await fetch("http://localhost:8000/transcribe", {
+      method: "POST",
+      body: JSON.stringify({
+        video_url: url,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const json_response = await response.json();
+    setText(json_response.message);
   }
 
   async function handleUploadSubmit(e) {
     e.preventDefault();
     validateUploadFormWithJS();
     const upload = document.querySelector("#upload").files[0];
-    getBase64(upload)
+    getBase64(upload);
   }
 
   function getBase64(file) {
@@ -63,9 +64,9 @@ export default function Home() {
       console.log(reader.result);
     };
     reader.onerror = function (error) {
-      console.log('Error: ', error);
+      console.log("Error: ", error);
     };
- }
+  }
 
   function validateUploadFormWithJS() {
     const upload = document.querySelector("#upload").value;
@@ -73,10 +74,10 @@ export default function Home() {
       alert("Please upload a valid video.");
       return false;
     } else if (upload) {
-      const filetype = upload.split('.').pop();
-      console.log(filetype)
+      const filetype = upload.split(".").pop();
+      console.log(filetype);
       if (!filetype === "mov" && !filetype === "mp4") {
-        alert("Your file type should be MOV or MP4")
+        alert("Your file type should be MOV or MP4");
         return false;
       }
     }
@@ -189,7 +190,7 @@ export default function Home() {
           }
         >
           <form method="post" className="w-full">
-            <div class="flex items-center justify-center w-full mb-4">
+            {/* <div class="flex items-center justify-center w-full mb-4">
               <label for="toggleB" class="flex items-center cursor-pointer">
                 <div class="relative">
                   <input
@@ -221,7 +222,7 @@ export default function Home() {
                   Switch to {toggle === "youtube" ? "Upload" : "Youtube"}
                 </div>
               </label>
-            </div>
+            </div> */}
             {/* <input
               onChange={(e) => {
                 if (e.target.checked == true) {
@@ -319,6 +320,29 @@ export default function Home() {
                     frameborder="0"
                     allowfullscreen
                   ></iframe>
+                </div>
+              </>
+            )}
+            {text && (
+              <>
+                <label
+                  htmlFor="youtube"
+                  className={
+                    toggle === "upload"
+                      ? "text-indigo-500 text-xl font-medium"
+                      : "text-red-500 text-xl font-medium"
+                  }
+                >
+                  Text
+                </label>
+                <div
+                  className={
+                    toggle === "upload"
+                      ? "flex w-full bg-violet-300 p-3 rounded-lg"
+                      : "flex w-full bg-rose-300 p-3 rounded-lg"
+                  }
+                >
+                  <p className="text-lg font-medium">{text}</p>
                 </div>
               </>
             )}

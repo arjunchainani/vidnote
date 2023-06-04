@@ -5,4 +5,4 @@ import torch
 import os
 
 model = transformers.AutoModelForCausalLM.from_pretrained('bigscience/bloomz-1b1')
-model.save_pretrained('./saved_models/')
+model.save_pretrained('./../saved_models/')

@@ -16,6 +16,9 @@ export default function Dashboard() {
 
         fetch("http://localhost:8000/login", {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify({
             username: username,
             password: password,
@@ -26,8 +29,8 @@ export default function Dashboard() {
           })
           .then(function (data) {
             if (data.ok) {
-              alert("Logged in successfully!");
-              window.location.href = "/dashboard";
+              localStorage.setItem("loginTokenVidNote", data.message)
+              window.location.replace("/dashboard")
             } else {
               alert("Login failed: " + data.message);
             }

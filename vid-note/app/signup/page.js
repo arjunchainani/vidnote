@@ -16,6 +16,9 @@ export default function Signup() {
 
         fetch("http://localhost:8000/register", {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify({
             username: username,
             password: password,
@@ -25,7 +28,7 @@ export default function Signup() {
             return response.json();
           })
           .then(function (data) {
-            if (data.success) {
+            if (data.ok) {
               alert("Registration successful! Please log in.");
               window.location.href = "/login";
             } else {

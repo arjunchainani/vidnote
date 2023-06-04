@@ -4,7 +4,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import jwt
 from flask_cors import CORS, cross_origin
+from pytube import YouTube 
+from datetime import datetime
+from translation import convert_video_to_text
+from model import ConciseSummarizerModel
 
+SAVE_PATH = "C:\\Users\\home\\OneDrive\\Desktop\\Coding\\Hackathons\\JPS-HACKS-Notes-App\\backendpython\\videos"
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -22,19 +27,36 @@ notes_collection = db['notes']
 def home():
     return "Hello World!"
 
-# @app.route('/convert', methods=['POST'])
-# def convert_to_speech():
-#     video_url = request.get_json()["video_url"]
-#     # add processing code if you need
+@app.route('/transcribe', methods=['POST'])
+def convert_to_speech():
+    try:
+        video_url = request.get_json()["video_url"]
+        # add processing code if you need
+        yt = YouTube(video_url)
+        yt.streams.filter(file_extension='mp4', res="720p").first().download(SAVE_PATH)
+        text = convert_video_to_text(yt.streams[0].title)
+        
+        # Passing transcription into model
+        model = ConciseSummarizerModel()
+        tokenized = model.summarize(text).to(model.device)
+        summary = model.untokenize(tokenized)
+        formatted_summary = model.format(summary)        
 
-#     response_data = {'message': 'Video URL received', 'video_url': video_url}
-#     response = app.response_class(
-#         response=json.dumps(response_data),
-#         status=200,
-#         mimetype='application/json'
-#     )
-#     return response
-
+        response_data = {'message': formatted_summary, 'ok': True}
+        response = app.response_class(
+            response=json.dumps(response_data),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+    except Exception as e: 
+        response_data = {'message': e, 'ok': False}
+        response = app.response_class(
+            response=json.dumps(response_data),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
 # @app.route('/play') 
 # def play_video():
 #     youtube_url = request.args.get('url')
@@ -47,7 +69,6 @@ def home():
 def register():
     if request.method == 'POST':
         username = request.json['username']
-        print(username)
         password = request.json['password']
         existing_user = users_collection.find_one({'username': username})
         if existing_user:
@@ -80,7 +101,7 @@ def login():
 
         user = users_collection.find_one({'username': username})
         if user and check_password_hash(user['password'], password):
-            encoded_jwt = jwt.encode({"id": user._id}, "secret", algorithm="HS256")
+            encoded_jwt = jwt.encode({"id": str(user["_id"])}, "secret", algorithm="HS256")
             response_data = {'message': encoded_jwt, 'ok': True}
             response = app.response_class(
                 response=json.dumps(response_data),
@@ -119,7 +140,7 @@ def get_notes():
         )
         return response
 
-@app.route('/create/note')
+@app.route('/create/note', methods=['POST'])
 @cross_origin()
 def create_notes():
     if (request.headers['jwt_token']):
@@ -142,7 +163,7 @@ def create_notes():
         )
         return response
 
-@app.route('/delete/note')
+@app.route('/delete/note', methods=['POST'])
 @cross_origin()
 def delete_notes():
     if (request.headers['jwt_token']):
