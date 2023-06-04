@@ -27,3 +27,4 @@ Website Jobs:
  - Taptaplit - I can make the backend and help with the website
  - Glowstik - Front end website & integrating backend
  - Suday (Walter White) - front end website
+ - Petar Isakovic - Front end website
