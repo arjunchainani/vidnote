@@ -24,7 +24,7 @@ class ConciseSummarizerModel:
         untokenized_summary = self.model.generate(
             **input_ids,
             max_length=max_len,
-            num_beams=5,
+            num_beams=3,
             num_return_sequences=3,
             early_stopping=False
         )
@@ -47,7 +47,7 @@ class ConciseSummarizerModel:
         return max(model_responses, key=len)
         
 if __name__ == '__main__':
-    print(f'Current Device: {device}')
+    # print(f'Current Device: {device}')
 
     model = ConciseSummarizerModel()
 

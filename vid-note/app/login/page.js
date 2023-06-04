@@ -14,19 +14,18 @@ export default function Login() {
         var username = document.getElementById("loginUsername").value;
         var password = document.getElementById("loginPassword").value;
 
-        var formData = new FormData();
-        formData.append("username", username);
-        formData.append("password", password);
-
-        fetch("/login", {
+        fetch("http://localhost:8000/login", {
           method: "POST",
-          body: formData,
+          body: JSON.stringify({
+            username: username,
+            password: password,
+          }),
         })
           .then(function (response) {
             return response.json();
           })
           .then(function (data) {
-            if (data.success) {
+            if (data.ok) {
               alert("Logged in successfully!");
               window.location.href = "/dashboard";
             } else {

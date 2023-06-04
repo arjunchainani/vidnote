@@ -14,13 +14,12 @@ export default function Signup() {
         var username = document.getElementById("signupUsername").value;
         var password = document.getElementById("signupPassword").value;
 
-        var formData = new FormData();
-        formData.append("username", username);
-        formData.append("password", password);
-
-        fetch("/register", {
+        fetch("http://localhost:8000/register", {
           method: "POST",
-          body: formData,
+          body: JSON.stringify({
+            username: username,
+            password: password,
+          }),
         })
           .then(function (response) {
             return response.json();
