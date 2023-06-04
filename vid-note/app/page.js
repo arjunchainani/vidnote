@@ -293,4 +293,3 @@ export default function Home() {
     </main>
   );
 }
-// const buttons = document.getElementById("buttonSubmit");

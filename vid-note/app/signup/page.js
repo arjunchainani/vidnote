@@ -60,14 +60,9 @@ export default function Signup() {
           </a>
         </ul>
       </nav>
-      <h1 className="text-3xl md:text-4xl lg:text-3xl mb-3 xl:text-6xl font-bold text-indigo-500 tracking-wide leading-tight text-center">
+      <h1 className="text-3xl md:text-4xl lg:text-3xl mb-3 xl:text-6xl font-bold text-indigo-500 mb-8 tracking-wide leading-tight text-center">
         Sign Up
       </h1>
-      <p className="mb-3 text-gray-500 text-2xl">
-        Join us and <span className={"text-indigo-500 font-medium"}>save</span>{" "}
-        your transcriptions for{" "}
-        <span className={"text-indigo-500 font-medium"}>FREE</span>.
-      </p>
       <div className="w-[40%] text-xl bg-violet-200 backdrop-blur rounded-lg p-8">
         {/* Your signup form */}
         <form id="signupForm">

@@ -44,8 +44,9 @@ body {
   }
 }
 
-body {
+html {
   overflow-x: hidden;
+  background: #D9B4FF;
 }
 
 input ~ .dot {
