@@ -2,9 +2,7 @@
 import Image from "next/image";
 import Head from "next/head";
 import Script from "next/script";
-import YouTube from "react-youtube";
 import React, { useState } from "react";
-import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 
 export default function Home() {
@@ -20,7 +18,7 @@ export default function Home() {
     },
   };
 
-  function validateFormWithJS() {
+  function validateYoutubeFormWithJS() {
     const youtube = document.querySelector("#youtube").value;
     if (!youtube) {
       alert("Please enter a valid link.");
@@ -34,9 +32,9 @@ export default function Home() {
     setShowFrame(true);
   }
 
-  async function handleSubmit(e) {
+  async function handleYoutubeSubmit(e) {
     e.preventDefault();
-    validateFormWithJS();
+    validateYoutubeFormWithJS();
     // const response = await fetch("http://localhost:8000/convert", {
     //   method: "POST",
     //   body: JSON.stringify({
@@ -51,6 +49,40 @@ export default function Home() {
     // console.log(json_response)
   }
 
+  async function handleUploadSubmit(e) {
+    e.preventDefault();
+    validateUploadFormWithJS();
+    const upload = document.querySelector("#upload").files[0];
+    getBase64(upload)
+  }
+
+  function getBase64(file) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      console.log(reader.result);
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+ }
+
+  function validateUploadFormWithJS() {
+    const upload = document.querySelector("#upload").value;
+    if (!upload) {
+      alert("Please upload a valid video.");
+      return false;
+    } else if (upload) {
+      const filetype = upload.split('.').pop();
+      console.log(filetype)
+      if (!filetype === "mov" && !filetype === "mp4") {
+        alert("Your file type should be MOV or MP4")
+        return false;
+      }
+    }
+    setShowFrame(true);
+  }
+
   return (
     <main
       className={
@@ -60,7 +92,7 @@ export default function Home() {
       }
     >
       <Head>
-        <title>Vid Node</title>
+        <title>Vid Note</title>
       </Head>
       <nav className="z-20 absolute w-screen px-40 py-4 top-0 left-0 flex justify-between items-center">
         <a
@@ -222,7 +254,7 @@ export default function Home() {
                     placeholder="Enter Video Link"
                   />
                   <button
-                    onClick={handleSubmit}
+                    onClick={handleYoutubeSubmit}
                     id="buttonSubmit"
                     className="rounded-md bg-rose-500 p-2 px-4 text-lg font-medium text-white ease-in-out duration-300 hover:bg-rose-400 transform hover:scale-105"
                   >
@@ -241,6 +273,7 @@ export default function Home() {
                 </label>
                 <div className="flex bg-indigo-300 p-3 rounded-lg mb-2">
                   <input
+                    id="upload"
                     type="file"
                     class="block w-full text-lg text-indigo-500
                     file:mr-4 file:py-2 file:px-4
@@ -250,6 +283,13 @@ export default function Home() {
                     hover:file:bg-indigo-400
                   "
                   />
+                  <button
+                    onClick={handleUploadSubmit}
+                    id="buttonSubmit"
+                    className="rounded-md bg-indigo-500 p-2 px-4 text-lg font-medium text-white ease-in-out duration-300 hover:bg-indigo-400 transform hover:scale-105"
+                  >
+                    Submit
+                  </button>
                 </div>
               </>
             )}

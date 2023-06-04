@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, flash
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
+import jwt
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -10,6 +11,7 @@ app.secret_key = 'your_secret_key'
 client = MongoClient('mongodb+srv://T:Taptaplit10@cluster0.wvq5zof.mongodb.net/?retryWrites=true&w=majority')
 db = client['your_database']
 users_collection = db['users']
+notes_collection = db['notes']
 
 @app.route('/')
 def home():
@@ -43,17 +45,25 @@ def register():
 
         existing_user = users_collection.find_one({'username': username})
         if existing_user:
-            flash('Username already exists.', 'error')
-            return redirect('/register')
+            response_data = {'message': 'Username Already Exists', 'ok': False}
+            response = app.response_class(
+                response=json.dumps(response_data),
+                status=200,
+                mimetype='application/json'
+            )
+            return response
 
         hashed_password = generate_password_hash(password)
 
         new_user = {'username': username, 'password': hashed_password}
         users_collection.insert_one(new_user)
-        flash('Registration successful!', 'success')
-        return redirect('/login')
-
-    return render_template('register.html')
+        response_data = {'message': 'Registration Successful', 'ok': True}
+        response = app.response_class(
+            response=json.dumps(response_data),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -63,15 +73,26 @@ def login():
 
         user = users_collection.find_one({'username': username})
         if user and check_password_hash(user['password'], password):
-            flash('Logged in successfully!', 'success')
-            return redirect('/dashboard')
+            user_token = jwt.encode({"id": user._id})
+            response_data = {'message': user_token, 'ok': True}
+            response = app.response_class(
+                response=json.dumps(response_data),
+                status=200,
+                mimetype='application/json'
+            )
+            return response
         else:
-            flash('Invalid username or password.', 'error')
+            response_data = {'message': "Invalid Username or Password", 'ok': False}
+            response = app.response_class(
+                response=json.dumps(response_data),
+                status=200,
+                mimetype='application/json'
+            )
+            return response
 
-    return render_template('login.html')
 
-@app.route('/dashboard')
-def dashboard():
+@app.route('/get/notes')
+def getNotes():
     return "Welcome to the dashboard!"
 
 if __name__ == '__main__':

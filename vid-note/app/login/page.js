@@ -3,7 +3,7 @@ import Image from "next/image";
 import Head from "next/head";
 import React, { useEffect } from "react";
 
-export default function Login() {
+export default function Dashboard() {
   useEffect(() => {
     // Login Form Submission
     document

@@ -9,7 +9,7 @@ class ConciseSummarizerModel:
         torch.set_default_tensor_type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor)
 
         # Getting model and tokenizer
-        self.model = transformers.AutoModelForCausalLM.from_pretrained('bigscience/bloomz-3b', use_cache=True).to(self.device)
+        self.model = transformers.AutoModelForCausalLM.from_pretrained('./saved_models/', use_cache=True).to(self.device)
         self.tokenizer = transformers.AutoTokenizer.from_pretrained('bigscience/bloomz-3b')
         assert self.model.__class__.__name__ == 'BloomForCausalLM', 'Model did not install properly'
         
@@ -45,9 +45,19 @@ class ConciseSummarizerModel:
             model_responses.append(split_sentence[-1])
 
         return max(model_responses, key=len)
+    
+    def format(self, summary):
+        points = summary.split('. ')
+
+        bulleted = []
+        for index, point in enumerate(points):
+            bulleted.append(f'{index + 1}. ' + point)
+        
+        formatted = '\n'.join(bulleted)
+        return formatted
         
 if __name__ == '__main__':
-    print(f'Current Device: {device}')
+    # print(f'Current Device: {device}')
 
     model = ConciseSummarizerModel()
 
@@ -55,4 +65,6 @@ if __name__ == '__main__':
         lecture = f.read()
     
     tokenized = model.summarize(lecture).to(model.device)
-    final = model.untokenize(tokenized)
+    summary = model.untokenize(tokenized)
+    formatted_summary = model.format(summary)
+    print(formatted_summary)
