@@ -1,30 +1,7 @@
-# JPS-HACKS-Notes-App
+# VidNote
 
-## The Plan
-A notes app for deaf people
-You can insert a lecture that is transcripted and then translated into sign language
-Oh yeah this is actually a pretty good idea. I think it might be doable with a text-to-speech library or smth (Python: Convert Speech to text and text to Speech - GeeksforGeeks) 
-Subtitles
-We can use a large language model to take in the lecture speech and make it more concise for the notes (then we can go in ML category too)
+Did you know that more than 1.5 billion people are globally affected by hearing loss? In fact, it even affects 34 million children, and about 95% of these affected children are unable to pursue higher education as a result?
 
-Pros:
-- Similar to number 3 pros
-- People who make captions have easier lives
-- Cooler YouTube captions
+Enter **VidNote**: A powerful application that allows students with hearing disabilities to engage with classroom content. Using an machine learning model, we are able to record the audio that their classmates would be hearing and allow these other students to receive the same information in a concise, easy-to-understand notes format.
 
-Cons:
-- Hard to make (maybe)
-- Challenge
-
-## Jobs
-Backend Jobs:
-- Text To Speech Jobs (BIGest PROBLEM (convert python to text to speach)):
-- Arjun (chillingotter) — I’ll do the model to convert the translated speech into more concise notes
-- Suday (Walter White) - I can do python with the text to speech (**will need a practice video)
-
-
-Website Jobs:
- - Taptaplit - I can make the backend and help with the website
- - Glowstik - Front end website & integrating backend
- - Suday (Walter White) - front end website
- - Petar Isakovic - Front end website
+This website currently works with Youtube video uploads, but we plan to add options to upload local video files and eventually even live record in the future.
