@@ -31,7 +31,7 @@ class ConciseSummarizerModel:
 
         return untokenized_summary
 
-    def untokenize(self, tokens):
+    def untokenize(self, tokens: torch.IntTensor):
         untokenized = []
         model_responses = []
         

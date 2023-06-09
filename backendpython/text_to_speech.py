@@ -3,13 +3,14 @@ from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import jwt
+import os
 from flask_cors import CORS, cross_origin
 from pytube import YouTube 
 from datetime import datetime
 from translation import convert_video_to_text
 from model import ConciseSummarizerModel
 
-SAVE_PATH = "C:\\Users\\home\\OneDrive\\Desktop\\Coding\\Hackathons\\JPS-HACKS-Notes-App\\backendpython\\videos"
+SAVE_PATH = os.path.abspath('./videos')
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
