@@ -36,12 +36,16 @@ def convert_to_speech():
         yt = YouTube(video_url)
         yt.streams.filter(file_extension='mp4', res="720p").first().download(SAVE_PATH)
         text = convert_video_to_text(yt.streams[0].title)
+
+        print(f'SUCCESSFULLY CONVERTED FILE...')
         
         # Passing transcription into model
         model = ConciseSummarizerModel()
         tokenized = model.summarize(text).to(model.device)
         summary = model.untokenize(tokenized)
-        formatted_summary = model.format(summary)        
+        formatted_summary = model.format(summary)
+
+        print(f'PASSED THROUGH MODEL...')        
 
         response_data = {'message': formatted_summary, 'ok': True}
         response = app.response_class(

@@ -10,7 +10,7 @@ class ConciseSummarizerModel:
 
         # Getting model and tokenizer
         self.model = transformers.AutoModelForCausalLM.from_pretrained('./../saved_models/', use_cache=True).to(self.device)
-        self.tokenizer = transformers.AutoTokenizer.from_pretrained('bigscience/bloomz-3b')
+        self.tokenizer = transformers.AutoTokenizer.from_pretrained('./../saved_models/tokenizers')
         assert self.model.__class__.__name__ == 'BloomForCausalLM', 'Model did not install properly'
         
     def summarize(self, text, max_len=5000):
