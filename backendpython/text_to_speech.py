@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, flash
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
 import json
 import jwt
 import os
@@ -10,6 +11,8 @@ from datetime import datetime
 from translation import convert_video_to_text
 from model import ConciseSummarizerModel
 
+load_dotenv()
+
 SAVE_PATH = os.path.abspath('./videos')
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -18,7 +21,8 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # MongoDB connection
-client = MongoClient('mongodb+srv://T:Taptaplit10@cluster0.wvq5zof.mongodb.net/?retryWrites=true&w=majority')
+creds = os.getenv('MONGODB_Creds')
+client = MongoClient(creds)
 db = client['your_database']
 users_collection = db['users']
 notes_collection = db['notes']
@@ -39,17 +43,27 @@ def convert_to_speech():
 
         print(f'SUCCESSFULLY CONVERTED FILE...')
         
-        # Passing transcription into model
-        model = ConciseSummarizerModel()
-        tokenized = model.summarize(text).to(model.device)
-        summary = model.untokenize(tokenized)
-        formatted_summary = model.format(summary)
+        # # Passing transcription into model
+        # print('DEBUG: Initializing model')
+        # model = ConciseSummarizerModel()
+        # print('Finished initializing')
 
-        print(f'PASSED THROUGH MODEL...')        
+        # print('DEBUG: Starting summary')
+        # tokenized = model.summarize(text).to(model.device)
+        # print('Finished summary')
 
-        response_data = {'message': formatted_summary, 'ok': True}
+        # print('DEBUG: Starting untokenization')
+        # summary = model.untokenize(tokenized)
+        # print('Finished untokenization')
+        # formatted_summary = model.format(summary)
+
+        # print(f'PASSED THROUGH MODEL...')        
+
+        # response_data = {'message': formatted_summary, 'ok': True}
+
+        response_data2 = {'message': text, 'ok': True}
         response = app.response_class(
-            response=json.dumps(response_data),
+            response=json.dumps(response_data2),
             status=200,
             mimetype='application/json'
         )

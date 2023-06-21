@@ -17,9 +17,11 @@ class ConciseSummarizerModel:
         # Initializing prompt
         prompt = f'{text}. Summarize the previous information in concise sentences: '
 
+        print('DEBUG: Tokenizing')
         # Tokenizing prompt
         input_ids = self.tokenizer(prompt, return_tensors='pt').to(self.device)
         
+        print('DEBUG: Generating')
         # Passing in tokens to model
         untokenized_summary = self.model.generate(
             **input_ids,
