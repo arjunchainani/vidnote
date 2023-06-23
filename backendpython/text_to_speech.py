@@ -43,27 +43,22 @@ def convert_to_speech():
 
         print(f'SUCCESSFULLY CONVERTED FILE...')
         
-        # # Passing transcription into model
-        # print('DEBUG: Initializing model')
-        # model = ConciseSummarizerModel()
-        # print('Finished initializing')
+        # Passing transcription into model
+        print('DEBUG: Initializing model')
+        model = ConciseSummarizerModel(pipeline=True)
+        print('Finished initializing')
 
-        # print('DEBUG: Starting summary')
-        # tokenized = model.summarize(text).to(model.device)
-        # print('Finished summary')
+        print('DEBUG: Starting summary')
+        unformatted = model.pipeline_summary(text)
+        formatted = model.format(unformatted)
 
-        # print('DEBUG: Starting untokenization')
-        # summary = model.untokenize(tokenized)
-        # print('Finished untokenization')
-        # formatted_summary = model.format(summary)
+        print(f'PASSED THROUGH MODEL...')        
 
-        # print(f'PASSED THROUGH MODEL...')        
+        response_data = {'message': formatted, 'ok': True}
 
-        # response_data = {'message': formatted_summary, 'ok': True}
-
-        response_data2 = {'message': text, 'ok': True}
+        # response_data2 = {'message': text, 'ok': True}
         response = app.response_class(
-            response=json.dumps(response_data2),
+            response=json.dumps(response_data),
             status=200,
             mimetype='application/json'
         )
